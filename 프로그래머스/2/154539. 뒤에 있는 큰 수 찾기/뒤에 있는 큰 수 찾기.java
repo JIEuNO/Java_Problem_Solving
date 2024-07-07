@@ -1,58 +1,62 @@
 class Solution {
-    
-    public static int[] stack;
-    public static int top = -1;
-    public static int[] answer;
-    
     public int[] solution(int[] numbers) {
+        int len = numbers.length, idx = 0;
+        int[] answer = new int[len];
+        Node res;
         
-        int len = numbers.length;
-        answer = new int[len];
-        stack = new int[len + 1];
+        Stack s = new Stack(len + 1);
+        s.add(new Node(idx, numbers[idx]));
+        idx += 1;
         
-        for (int i = len - 1; i >= 0; i--) {
-            if (isEmpty())
-                answer[i] = -1;
- 
-            else {
-                if (numbers[i] < peek()) {
-                    fillAnswer(i);
-                }
-                else {
-                    while (!isEmpty() && numbers[i] >= peek()) {
-                        poll();
-                    }
-                    fillAnswer(i);
-                }
+        while(idx < len) {
+            while(!s.isEmpty() && numbers[idx] > s.peek().number) {
+                res = s.pop();
+                answer[res.idx] = numbers[idx];
             }
-            
-            insert(numbers[i]);
-            
+            s.add(new Node(idx, numbers[idx]));
+            idx += 1;
+        }
+        
+        while (!s.isEmpty()) {
+            res = s.pop();
+            answer[res.idx] = -1;
         }
         
         return answer;
     }
+}
+
+class Stack {
+    Node[] stack;
+    int top;
     
-    public static void fillAnswer(int idx) {
-        if (isEmpty())
-            answer[idx] = -1;
-        else
-            answer[idx] = peek();
+    Stack(int size) {
+        this.stack = new Node[size];
+        this.top = -1;
     }
     
-    public static void insert(int a) {
-        stack[++top] = a;
+    public void add(Node data) {
+        stack[++top] = data;
     }
     
-    public static int peek() {
-        return stack[top];
-    }
-    
-    public static int poll() {
+    public Node pop() {
         return stack[top--];
     }
     
-    public static boolean isEmpty() {
+    public Node peek() {
+        return stack[top];
+    }
+    
+    public boolean isEmpty() {
         return top == -1;
+    }
+}
+
+class Node {
+    int idx, number;
+    
+    Node(int idx, int number) {
+        this.idx = idx;
+        this.number = number;
     }
 }
