@@ -2,8 +2,6 @@ import java.lang.Math;
 
 class Solution {
     public int solution(int x, int y, int n) {
-        if (x == y)
-            return 0;
         
         int idx;
         int[] num = new int[y + 1];
