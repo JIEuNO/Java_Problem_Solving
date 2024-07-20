@@ -2,23 +2,38 @@ import java.lang.Math;
 
 class Solution {
     public int solution(int x, int y, int n) {
-        int[] dp = new int[y + 1];
+        if (x == y)
+            return 0;
         
-        for (int i = x; i <= y; i++)
-            dp[i] = Integer.MAX_VALUE;
-        dp[x] = 0;
+        int idx;
+        int[] num = new int[y + 1];
         
-        for (int i = x; i <= y; i++) {
-            if (dp[i] == Integer.MAX_VALUE)
+        for (int i = x + 1; i <= y; i++)
+            num[i] = Integer.MAX_VALUE;
+        num[x] = 0;
+        
+        for (int i = x; i < y; i++) {
+            
+            if (num[i] == Integer.MAX_VALUE)
                 continue;
-            if (i + n <= y)
-                dp[i + n] = Math.min(dp[i + n], dp[i] + 1);
-            if ((i * 2) <= y)
-                dp[i * 2] = Math.min(dp[i * 2], dp[i] + 1);
-            if ((i * 3) <= y)
-                dp[i * 3] = Math.min(dp[i * 3], dp[i] + 1);
+            
+            idx = i + n;
+            if (idx <= y)
+                num[idx] = min(num[idx], num[i] + 1);
+            
+            idx = i << 1;
+            if (idx <= y)
+                num[idx] = min(num[idx], num[i] + 1);
+            
+            idx = i * 3;
+            if (idx <= y)
+                num[idx] = min(num[idx], num[i] + 1);
         }
         
-        return dp[y] == Integer.MAX_VALUE ? -1 : dp[y];
+        return num[y] == Integer.MAX_VALUE ? -1 : num[y];
+    }
+    
+    public int min(int a, int b) {
+        return a < b ? a : b;
     }
 }
